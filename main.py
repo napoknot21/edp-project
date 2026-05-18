@@ -16,6 +16,17 @@ from src.plotting import plot_mesh, plot_solution, plot_convergence
 
 
 def solve_one (mesh_path, p, q, bx, by, c, out, plot=False) :
+    """Solve the model problem on one mesh and report relative errors.
+
+    Parameters are the mesh path, the exact-solution indices ``p`` and ``q``,
+    the convection vector ``(bx, by)``, the reaction coefficient ``c`` and the
+    output directory. When ``plot`` is true, mesh and solution figures are
+    written to ``out``.
+
+    Returns:
+        A tuple ``(h, e_l2, e_h1)`` containing the mesh size and the relative
+        L2 and H1 errors.
+    """
     
     vtx, tri, bnd = load_mesh(mesh_path)
     b = np.array([bx, by], dtype=float)
@@ -62,9 +73,7 @@ def solve_one (mesh_path, p, q, bx, by, c, out, plot=False) :
 
 
 def run_convergence(args) :
-    """
-    
-    """
+    """Run ``solve_one`` on several meshes and save a convergence plot."""
     hs, e_l2s, e_h1s = [], [], []
     
     for mesh_path in args.meshes :
@@ -88,6 +97,7 @@ def run_convergence(args) :
 
 
 def parser() :
+    """Build the command-line parser used by ``main.py``."""
 
     p = argparse.ArgumentParser()
     
@@ -106,9 +116,6 @@ def parser() :
 
 
 if __name__ == "__main__" :
-    """
-    
-    """
     args = parser().parse_args()
 
     if args.mode == "single":
